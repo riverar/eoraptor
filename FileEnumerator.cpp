@@ -8,7 +8,9 @@ void eoraptor::FileEnumerator::EnumerateFilesAtPath(const std::wstring& path, co
 	
 	if (findHandle.get() == INVALID_HANDLE_VALUE)
 	{
-		throw std::system_error(std::error_code(GetLastError(), std::system_category()));
+		std::system_error& e = std::system_error(std::error_code(GetLastError(), std::system_category()));
+		printf("%s: %s\n\n", path.c_str, e.what());
+		return;
 	}
 
 	do
