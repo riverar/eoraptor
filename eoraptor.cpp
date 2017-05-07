@@ -14,8 +14,13 @@ int wmain(int argc, wchar_t *argv[], wchar_t *envp[])
 
 	try
 	{
-		fileEnumerator.EnumerateFilesAtPath(argv[1], [&imageEnumerator, &totalBytesWasted](const std::wstring& filePath) {
+		fileEnumerator.EnumerateFilesAtPath(argv[1], [&imageEnumerator, &totalBytesWasted](const std::wstring& filePath, const std::system_error* error) {
 			wprintf(L"%s\n", filePath.c_str());
+
+			if (error != NULL) {
+				printf("Error: %s", error->what());
+				return;
+			}
 
 			size_t moduleBytesWasted = 0;
 			imageEnumerator.EnumerateImageResourcesInFile(filePath, [&filePath, &moduleBytesWasted, &totalBytesWasted](const void* resourcePtr, size_t size, long resourceId) {
