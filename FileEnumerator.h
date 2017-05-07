@@ -2,7 +2,7 @@
 
 namespace eoraptor
 {
-	using FileEnumeratorCallback = std::function<void(std::wstring filePath)>;
+	using FileEnumeratorCallback = std::function<void(std::wstring filePath, std::system_error* error)>;
 
 	class FileEnumerator {
 	public:

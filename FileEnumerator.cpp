@@ -5,10 +5,11 @@ void eoraptor::FileEnumerator::EnumerateFilesAtPath(const std::wstring& path, co
 {
 	WIN32_FIND_DATA findData = {};
 	unique_handle findHandle(FindFirstFile((path + L"\\*").c_str(), &findData), FindClose);
-	
+
 	if (findHandle.get() == INVALID_HANDLE_VALUE)
 	{
-		throw std::system_error(std::error_code(GetLastError(), std::system_category()));
+		callback(std::wstring(path), &std::system_error(std::error_code(GetLastError(), std::system_category())));
+		return;
 	}
 
 	do
@@ -30,7 +31,7 @@ void eoraptor::FileEnumerator::EnumerateFilesAtPath(const std::wstring& path, co
 					{
 						wchar_t combinedPath[MAX_PATH] = {};
 						PathCombine(combinedPath, path.c_str(), findData.cFileName);
-						callback(std::wstring(combinedPath));
+						callback(std::wstring(combinedPath), NULL);
 					}
 				}
 			}
